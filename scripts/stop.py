@@ -4,7 +4,7 @@ CURRENTDIR = os.path.dirname(__file__)
 DEPLOYMDIR = os.path.join(CURRENTDIR, "../deployments")
 
 
-def start(type):
+def stop(type):
     all_files = os.listdir(DEPLOYMDIR)
     # filter only matched keyword
     selected_configs = [f for f in all_files if type in f]
@@ -13,8 +13,8 @@ def start(type):
 
 
 def run(configure_name):
-    os.system("kubectl apply -f " + os.path.join(DEPLOYMDIR, configure_name))
+    os.system("kubectl delete -f " + os.path.join(DEPLOYMDIR, configure_name))
 
 
 # currently there are persistent_volume, deployment
-start("persistent_volume")
+stop("persistent_volume")
