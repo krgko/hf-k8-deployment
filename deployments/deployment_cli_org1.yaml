@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: org1-cli
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: hyperledger
+        name: org1-cli
+        role: cli
+        org: org1
+    spec:
+      containers:
+        - name: org1-cli
+          image: hyperledger/fabric-tools:latest
+          env:
+            - name: GOPATH
+              value: /opt/gopath
+            - name: CORE_VM_ENDPOINT
+              value: unix:///host/var/run/docker.sock
+            - name: FABRIC_LOGGING_SPEC
+              value: debug
+            - name: CORE_PEER_ID
+              value: cli
+            - name: CORE_PEER_ADDRESS
+              value: peer0.org1.example.com:7051
+            - name: CORE_PEER_LOCALMSPID
+              value: Org1MSP
+            - name: CORE_PEER_MSPCONFIGPATH
+              value: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+            - name: CORE_CHAINCODE_KEEPALIVE
+              value: "10"
+          workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+          command: ["/bin/bash"]
+          volumeMounts:
+            - name: cert-pv
+              mountPath: /etc/hyperledger/fabric/msp
+            - name: artifact-pv
+              mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+            - name: chaincode-pv
+              mountPath: /opt/gopath/src/github.com/
+          resources:
+            requests:
+              memory: 128M
+              cpu: "0.05"
+            limits:
+              memory: 256M
+              cpu: "0.1"
+      volumes:
+        - name: cert-pv
+          persistentVolumeClaim:
+            claimName: cert-pvc
+        - name: artifact-pv
+          persistentVolumeClaim:
+            claimName: artifact-pvc
+        - name: chaincode-pv
+          persistentVolumeClaim:
+            claimName: chaincode-pvc            
+        - name: run
+          hostPath:
+            path: /var/run
