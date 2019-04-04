@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: org2-ca
-          image: hyperledger/fabric-ca:latest
+          image: hyperledger/fabric-ca:1.4.0
           env:
             - name: FABRIC_CA_HOME
               value: /etc/hyperledger/fabric-ca-server

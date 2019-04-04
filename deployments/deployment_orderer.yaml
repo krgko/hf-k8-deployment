@@ -1,52 +1,76 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  namespace: N/A
-  name: ca
+  namespace: default
+  name: orderer0
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: hyperledger
-        role: ca
-        org: N/A
-        name: ca
+        role: orderer
+        org: orderer
+        orderer-id: orderer0
     spec:
       containers:
-        - name: ca
-          image: hyperledger/fabric-ca:latest
+        - name: orderer0
+          image: hyperledger/fabric-orderer:1.4.0
           env:
-            - name: FABRIC_CA_HOME
-              value: /etc/hyperledger/fabric-ca-server
+            - name: FABRIC_LOGGING_SPEC
+              value: "debug"
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: 0.0.0.0
+            - name: ORDERER_GENERAL_GENESISMETHOD
+              value: file
+            - name: ORDERER_GENERAL_GENESISFILE
+              value: /etc/hyperledger/orderer/orderer.genesis.block
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: OrdererMSP
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: /etc/hyperledger/orderer/msp
           ports:
-            - containerPort: 7054
-          command: ["sh"]
-          args: ["-c", N/A]
+            - containerPort: 7050
+          command: ["orderer"]
           volumeMounts:
-            - mountPath: /etc/hyperledger/fabric-ca-server-config
-              name: certificaate
-              subPath: N/A
-       volumes:
+            - mountPath: /var/hyperledger/orderer/msp
+              name: certificate
+              subPath: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp
+            - mountPath: /var/hyperledger/orderer/tls
+              name: certificate
+              subPath: crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/
+            - mountPath: /var/hyperledger/orderer/orderer.genesis.block
+              name: artifact
+          resources:
+            requests:
+              memory: 256M
+              cpu: "0.2"
+            limits:
+              memory: 512M
+              cpu: "0.5"
+      volumes:
         - name: certificate
           persistentVolumeClaim:
-            claimName: N/A   
-          
+            claimName: cert-pvc
+        - name: artifact
+          persistentVolumeClaim:
+            claimName: artifact-pvc
+---
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: N/A
-  name: ca
+  namespace: default
+  name: orderer0
 spec:
   selector:
     app: hyperledger
-    role: ca
-    org: N/A
-    name: ca
+    role: orderer
+    org: orderer
+    orderer-id: orderer0
 type: NodePort
 ports:
   - name: endpoint
     protocol: TCP
-    port: 7054
-    targetPort: 7054
-    nodePort: N/A
+    port: 7050
+    targetPort: 7050
+    nodePort: 30200

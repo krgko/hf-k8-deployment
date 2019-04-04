@@ -1,0 +1,94 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: org1-peer
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hyperledger
+        role: peer
+        org: org1
+        peer-id: peer0
+    spec:
+      containers:
+        - name: couchdb
+          images: hyperledger/fabric-couchdb:0.4.14
+          ports:
+            - containerPort: 5984
+
+        - name: org1-peer
+          image: hyperledger/fabric-peer:1.4.0
+          env:
+            - name: CORE_LEDGER_STATE_STATEDATABASE
+              value: "CouchDB"
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+              value: "localhost:5984"
+            - name: CORE_VM_ENDPOINT
+              value: "unix:///host/var/run/docker.sock"
+            - name: FABRIC_LOGGING_SPEC
+              value: "debug"
+            - name: CORE_PEER_LOCALMSPID
+              value: "Org1MSP"
+            - name: CORE_PEER_ID
+              value: "peer0.org1.example.com"
+            - name: CORE_PEER_MSPCONFIGPATH
+              value: "/etc/hyperledger/msp/peer/"
+            - name: CORE_PEER_ADDRESS
+              value: "peer0.org1.example.com:7051"
+          ports:
+            - containerPort: 7051
+            - containerPort: 7053
+          command: ["peer"]
+          args: ["node", "start"]
+          volumeMounts:
+            - mountPath: /etc/hyperledger/msp/peer
+              name: certificate
+              subPath: peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
+            - mountPath: /etc/hyperledger/msp/users
+              name: certificate
+              subPath: peerOrganizations/org1.example.com/users
+            - mountPath: /var/run
+              name: run
+          resources:
+            requests:
+              memory: 256M
+              cpu: "0.2"
+            limits:
+              memory: 512M
+              cpu: "0.5"
+      volumes:
+        - name: certificate
+          persistentVolumeClaim:
+            claimName: cert-pvc
+        - name: run
+          hostPath:
+            path: /host/var/run/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: peer-org1
+spec:
+  selector:
+    app: hyperledger
+    role: peer
+    org: org1
+    peer-id: peer0
+type: NodePort
+ports:
+  - name: peer-endpoint
+    protocol: TCP
+    port: 7051
+    targetPort: 7051
+    nodePort: 30110
+  - name: listener-endpoint
+    protocol: TCP
+    port: 7053
+    targetPort: 7053
+    nodePort: 30111
