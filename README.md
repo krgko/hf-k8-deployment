@@ -6,14 +6,6 @@
 2. Helm - application manager on k8s
 3. Fabric-samples repository
 
-
-## Generate certificate and channel artifact
-
-1. Clone repository fabric-samples
-2. Go to first-network
-3. Copy configtx.yaml and replace the old one
-4. Execute `./byfn generate -c {channel-name}`
-
 ### From scratch solution
 
 1. Download configtxgen and cryptogen

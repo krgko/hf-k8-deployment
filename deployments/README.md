@@ -6,7 +6,7 @@
 4. `kubectl get {pod,pv,pvc,rc,svc}`
 5. `kubectl describe {pod,pv,pvc,rc,svc}`
 
-## How to add file to kubernetes network on mikikube
+## How to add file to kubernetes network on minikube
 
 1. `minikube mount {current}:{destination}` - to move file to master node
 2. Access minikube command line
@@ -17,6 +17,6 @@
 
 ## How to set pv and pvc
 
-1. define config persistentVolume
-2. define config persistentVolumeClaim
-3. add volumes field to container which need to mount volume
+1. Define config persistentVolume
+2. Define config persistentVolumeClaim
+3. Add volumes field to container which need to mount volume
