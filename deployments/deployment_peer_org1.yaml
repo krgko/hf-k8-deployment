@@ -48,7 +48,7 @@ spec:
             - name: CORE_PEER_MSPCONFIGPATH
               value: "/etc/hyperledger/msp/peer/"
             - name: CORE_PEER_MSPCONFIGPATH
-              value: /etc/hyperledger/fabric/msp
+              value: /etc/hyperledger/msp
             - name: CORE_PEER_ADDRESS
               value: "peer0.org1.example.com:7051"
             - name: CORE_PEER_ADDRESSAUTODETECT

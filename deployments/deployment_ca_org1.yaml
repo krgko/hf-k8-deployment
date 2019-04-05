@@ -26,7 +26,7 @@ spec:
             - name: FABRIC_CA_SERVER_CA_CERTFILE
               value: /etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
             - name: FABRIC_CA_SERVER_CA_KEYFILE
-              value: /etc/hyperledger/fabric-ca-server-config/1983c39bbf00d17e15531c9661e86b81489053af0197d3ea019dee2a2d9e34a8_sk
+              value: /etc/hyperledger/fabric-ca-server-config/bfafe0afe27f694a5f1c024505c0a51a95c848443b5c69739ae3465eb7c5afce_sk
           ports:
             - containerPort: 7054
           command: ["sh"]

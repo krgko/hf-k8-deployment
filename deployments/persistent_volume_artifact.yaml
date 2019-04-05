@@ -10,7 +10,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /mnt/sda1/mounted/channel-artifacts/ # change to path you want 
+    path: /mnt/sda1/mounted/artifact # change to path you want 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

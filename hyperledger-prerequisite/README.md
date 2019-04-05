@@ -6,3 +6,5 @@
 3. Copy configtx.yaml and replace the old one
 4. Copy crypto-config.yaml and replace the old one
 5. Execute `./byfn generate -c {channel-name}`
+
+**Note**: Ensure that all file in the place. Check by see persistent volume config.
