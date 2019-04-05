@@ -15,8 +15,8 @@ spec:
         org: org1
     spec:
       containers:
-        - name: org1-cli
-          image: hyperledger/fabric-tools:latest
+        - name: org1-peer0-cli
+          image: hyperledger/fabric-tools:1.4.0
           env:
             - name: GOPATH
               value: /opt/gopath
@@ -27,7 +27,7 @@ spec:
             - name: CORE_PEER_ID
               value: cli
             - name: CORE_PEER_ADDRESS
-              value: peer0.org1.example.com:7051
+              value: localhost:7051
             - name: CORE_PEER_LOCALMSPID
               value: Org1MSP
             - name: CORE_PEER_MSPCONFIGPATH
@@ -36,9 +36,10 @@ spec:
               value: "10"
           workingDir: /opt/gopath/src/github.com/hyperledger/fabric/peer
           command: ["/bin/bash"]
+          args: ["-c", "sleep 3h"]
           volumeMounts:
             - name: cert-pv
-              mountPath: /etc/hyperledger/fabric/msp
+              mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
             - name: artifact-pv
               mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
             - name: chaincode-pv

@@ -6,12 +6,12 @@ CURRENTDIR = os.path.dirname(__file__)
 DEPLOYMDIR = os.path.join(CURRENTDIR, "../deployments")
 
 command_helper = """Usage:
-  start.py -t <pv|ca|orderer|peer>
+  start.py -t <pv|ca|orderer|peer|cli>
 
 Options:
   -h, --help            Get help options.
   -t, --type            Specify type for deploy kubernetes service.
-                        (types are pv, ca, orderer, peer)
+                        (types are pv, ca, orderer, peer, cli)
 """
 
 
@@ -43,6 +43,7 @@ def main(argv):
                 "ca": "deployment_ca",
                 "orderer": "deployment_orderer",
                 "peer": "deployment_peer",
+                "cli": "deployment_cli",
             }
             try:
                 start(switcher[arg])
