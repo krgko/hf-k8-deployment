@@ -44,6 +44,8 @@ spec:
               mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
             - name: chaincode-pv
               mountPath: /opt/gopath/src/github.com/
+            - name: docker-socket
+              mountPath: /host/var/run/docker.sock
           resources:
             requests:
               memory: 128M
@@ -61,6 +63,6 @@ spec:
         - name: chaincode-pv
           persistentVolumeClaim:
             claimName: chaincode-pvc            
-        - name: run
+        - name: docker-socket
           hostPath:
-            path: /var/run
+            path: /var/run/docker.sock

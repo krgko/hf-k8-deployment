@@ -46,8 +46,6 @@ spec:
             - name: CORE_PEER_TLS_SERVERHOSTOVERRIDE
               value: "peer0.org1.example.com"
             - name: CORE_PEER_MSPCONFIGPATH
-              value: "/etc/hyperledger/msp/peer/"
-            - name: CORE_PEER_MSPCONFIGPATH
               value: /etc/hyperledger/msp
             - name: CORE_PEER_ADDRESS
               value: "peer0.org1.example.com:7051"
@@ -65,8 +63,8 @@ spec:
             - mountPath: /etc/hyperledger/msp/users
               name: cert-pv
               subPath: peerOrganizations/org1.example.com/users
-            - mountPath: /var/run
-              name: run
+            - mountPath: /host/var/run/docker.sock
+              name: docker-socket
           resources:
             requests:
               memory: 256M
@@ -78,9 +76,9 @@ spec:
         - name: cert-pv
           persistentVolumeClaim:
             claimName: cert-pvc
-        - name: run
+        - name: docker-socket
           hostPath:
-            path: /host/var/run/
+            path: /var/run/docker.sock
 ---
 apiVersion: v1
 kind: Service

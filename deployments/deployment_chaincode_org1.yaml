@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chaincode
+  namespace: default
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: chaincode
+        channel: testchannel # change this
+    spec:
+      nodeSelector:
+        org: org1
+      containers:
+        - name: testchannel
+          image: $docker_image
+          command: ["/bin/bash", "-c", "--"]
+          args: ["cp -r /home/$CHAINCODE/* ./ && go build -i && ./$CHAINCODE"]
+          env:
+            - name: CORE_PEER_ID
+              value: $CHAINCODE
+            - name: CORE_PEER_ADDRESS
+              value: $PEER_ADDRESS
+            - name: CORE_CHAINCODE_ID_NAME
+              value: testchannel:0.1
+            - name: GOPATH
+              value: /opt/gopath
+            - name: CORE_VM_ENDPOINT
+              value: unix:///host/var/run/docker.sock
+          volumeMounts:
+            - mountPath: /host/var/run/
+              name: docker-socket
+            - mountPath: /home/$CHAINCODE
+              name: chaincode-pv
+          workingDir: /opt/gopath
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: 128M
+              cpu: "0.05"
+            limits:
+              memory: 256M
+              cpu: "0.1"
+      restartPolicy: Always
+      volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+        - name: chaincode-pv
+          persistentVolumeClaim:
+            claimName: chaincode-pvc
