@@ -33,6 +33,11 @@ def main(argv):
     except getopt.GetoptError:
         print(command_helper)
         sys.exit(2)
+
+    if len(opts) == 0:
+        print(command_helper)
+        sys.exit(0)
+
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print(command_helper)

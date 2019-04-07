@@ -27,7 +27,7 @@ spec:
             - name: CORE_PEER_ID
               value: cli
             - name: CORE_PEER_ADDRESS
-              value: 172.17.0.10:7051 # IP to peer
+              value: 172.17.0.8:7051 # IP to peer
             - name: CORE_PEER_LOCALMSPID
               value: Org1MSP
             - name: CORE_PEER_MSPCONFIGPATH
@@ -43,7 +43,7 @@ spec:
             - name: artifact-pv
               mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
             - name: chaincode-pv
-              mountPath: /opt/gopath/src/github.com/
+              mountPath: /opt/gopath/src/github.com/chaincode
             - name: docker-socket
               mountPath: /host/var/run/docker.sock
           resources:
