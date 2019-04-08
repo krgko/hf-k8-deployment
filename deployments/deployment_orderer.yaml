@@ -33,12 +33,9 @@ spec:
             - containerPort: 7050
           command: ["orderer"]
           volumeMounts:
-            - mountPath: /etc/hyperledger/orderer/msp
+            - mountPath: /etc/hyperledger/orderer
               name: cert-pv
-              subPath: ordererOrganizations/example.com/orderers/orderer.example.com/msp/
-            - mountPath: /etc/hyperledger/orderer/tls
-              name: cert-pv
-              subPath: ordererOrganizations/example.com/orderers/orderer.example.com/tls/
+              subPath: ordererOrganizations/example.com/orderers/orderer.example.com
             - mountPath: /etc/hyperledger/artifact
               name: artifact-pv
           resources:
