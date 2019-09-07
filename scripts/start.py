@@ -17,6 +17,9 @@ Options:
 
 def start(type):
     all_files = os.listdir(DEPLOYMDIR)
+    if type == "deployment_cli":
+        os.system("sed -i 's/value\:.*\#.*/value\: peer\_addr\:7051 # IP to peer/g' ../deployments/deployment_cli_org1.yaml")
+
     # filter only matched keyword
     selected_configs = [f for f in all_files if type in f]
     for selected_config in selected_configs:
