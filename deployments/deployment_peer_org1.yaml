@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: org1-peer0-couchdb
-          image: hyperledger/fabric-couchdb:0.4.14
+          image: hyperledger/fabric-couchdb:0.4.15
           ports:
             - containerPort: 5984
           resources:
@@ -29,7 +29,7 @@ spec:
               cpu: "0.1"
 
         - name: org1-peer0
-          image: hyperledger/fabric-peer:1.4.0
+          image: hyperledger/fabric-peer:1.4.1
           env:
             - name: CORE_LEDGER_STATE_STATEDATABASE
               value: "CouchDB"

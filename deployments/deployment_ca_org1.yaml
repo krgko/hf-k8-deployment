@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: org1-ca
-          image: hyperledger/fabric-ca:1.4.0
+          image: hyperledger/fabric-ca:1.4.1
           env:
             - name: FABRIC_CA_HOME
               value: /etc/hyperledger/fabric-ca-server
@@ -26,7 +26,7 @@ spec:
             - name: FABRIC_CA_SERVER_CA_CERTFILE
               value: /etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
             - name: FABRIC_CA_SERVER_CA_KEYFILE
-              value: /etc/hyperledger/fabric-ca-server-config/9e281adc820b3a59e9c1f7e6aaa32e6471869ef3fab409e9c0989d283f4a355e_sk
+              value: /etc/hyperledger/fabric-ca-server-config/a4583f63d82809ab4c5ce43880fa496c544939335ae4d6fb38222874774c6e18_sk
           ports:
             - containerPort: 7054
           command: ["sh"]

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: orderer0
-          image: hyperledger/fabric-orderer:1.4.0
+          image: hyperledger/fabric-orderer:1.4.1
           env:
             - name: FABRIC_LOGGING_SPEC
               value: "debug"

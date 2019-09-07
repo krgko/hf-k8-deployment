@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: org1-peer0-cli
-          image: hyperledger/fabric-tools:1.4.0
+          image: hyperledger/fabric-tools:1.4.1
           env:
             - name: GOPATH
               value: /opt/gopath
