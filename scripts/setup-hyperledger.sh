@@ -43,7 +43,7 @@ joinChannel() {
 installChaincode() {
     set -ev
     # install chaincode
-    CORE_PEER_ADDRESS=$PEER_NAME:7051 kubectl exec $CLI_POD -- peer chaincode install -o $ORDERER_URL:7050 -n $CHAINCODE_ID -p $PATH_TO_CC -v "$1"
+    CORE_PEER_ADDRESS=$PEER_NAME:7051 kubectl exec $CLI_POD -- peer chaincode install -o $ORDERER_URL:7050 -n $1 -p $PATH_TO_CC -v "$2"
     exit 0
 }
 
@@ -52,7 +52,7 @@ instantiateChaincode() {
     # instantiate chaincode
     # Need to set /etc/hosts first to make peer can connect to orderer
     # Create chaincode container before instantiate
-    CORE_PEER_ADDRESS=$PEER_NAME:7051 kubectl exec $CLI_POD -- peer chaincode instantiate -o $ORDERER_URL:7050 -C $CHANNEL_NAME -n $CHAINCODE_ID -v "$1" -c '{"Args":["Init", "a", "100", "b", "0"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
+    CORE_PEER_ADDRESS=$PEER_NAME:7051 kubectl exec $CLI_POD -- peer chaincode instantiate -o $ORDERER_URL:7050 -C $1 -n $CHAINCODE_ID -v "$2" -c '{"Args":["Init", "a", "100", "b", "0"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
     exit 0
 }
 

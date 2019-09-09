@@ -1,6 +1,8 @@
 
 # Generate certificate and channel artifact
 
+**Note**: Current artifact and crypto-config are support only 1 channel
+
 1. Clone repository fabric-samples check out version needed
 2. Execute ./scripts/bootstrap to prepare binary file for cryptogen, cryptoconfig, cryptotxgen, etc.
 3. Go to basic-network
@@ -9,6 +11,7 @@
 6. Execute `./generate.yaml` - If got an error when create new `mkdir config` first
 
 Generate file will modify follow configtx.yaml and crypto-config.yaml
+
 ```sh
 #!/bin/sh
 #
@@ -18,7 +21,6 @@ Generate file will modify follow configtx.yaml and crypto-config.yaml
 #
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
-CHANNEL_NAME=mychannel
 
 # remove previous crypto material and config transactions
 rm -fr config/*
@@ -32,26 +34,40 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # generate genesis block for orderer
-configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./config/genesis.block
+configtxgen -profile TwoOrgsOrdererGenesis -channelID system-channel -outputBlock ./config/genesis.block
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1
 fi
 
 # generate channel configuration transaction
-configtxgen -profile TwoOrgChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile PublicChannel -outputCreateChannelTx ./config/channel1.tx -channelID channel1
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
+# generate channel configuration transaction
+configtxgen -profile PrivateChannel -outputCreateChannelTx ./config/channel2.tx -channelID channel2
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+
+
 # generate anchor peer transaction
-configtxgen -profile TwoOrgChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+configtxgen -profile PublicChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID channel1 -asOrg Org1MSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org1MSP..."
   exit 1
 fi
 
+# generate anchor peer transaction
+configtxgen -profile PrivateChannel -outputAnchorPeersUpdate ./config/Org2MSPanchors.tx -channelID channel2 -asOrg Org1MSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for Org1MSP..."
+  exit 1
+fi
 ```
 
 **Note**: Ensure that all file in the place. Check by see persistent volume config.
@@ -59,4 +75,4 @@ fi
 
 ## After make change configs
 
-- Update ca k8s file to use correct private key 
+- Update ca k8s file to use correct private key
