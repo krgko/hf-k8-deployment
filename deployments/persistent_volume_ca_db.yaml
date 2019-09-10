@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: ca-pv
+spec:
+  capacity:
+    storage: 500M
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /mnt/sda1/mounted/ca-server # change to path you want 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: default
+  name: ca-pvc
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10M

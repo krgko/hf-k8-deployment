@@ -6,7 +6,7 @@ CURRENTDIR = os.path.dirname(__file__)
 DEPLOYMDIR = os.path.join(CURRENTDIR, "../deployments")
 
 command_helper = """Usage:
-  start.py -t <pv|ca|orderer|peer|cli>
+  start.py -t <pv|ca|orderer|peer|cli|all>
 
 Options:
   -h, --help            Get help options.
@@ -16,14 +16,18 @@ Options:
 
 
 def start(type):
-    all_files = os.listdir(DEPLOYMDIR)
-    if type == "deployment_cli":
-        os.system("sed -i 's/value\:.*\#.*/value\: peer\_addr\:7051 # IP to peer/g' ../deployments/deployment_cli_org1.yaml")
+    if isinstance(type, list):
+        for t in type:
+            start(t)
+    else:
+        all_files = os.listdir(DEPLOYMDIR)
+        if type == "deployment_cli":
+            os.system("sed -i 's/value\:.*\#.*/value\: peer\_addr\:7051 # IP to peer/g' ../deployments/deployment_cli_org1.yaml")
 
-    # filter only matched keyword
-    selected_configs = [f for f in all_files if type in f]
-    for selected_config in selected_configs:
-        run(selected_config)
+        # filter only matched keyword
+        selected_configs = [f for f in all_files if type in f]
+        for selected_config in selected_configs:
+            run(selected_config)
 
 
 def run(configure_name):
@@ -52,6 +56,7 @@ def main(argv):
                 "orderer": "deployment_orderer",
                 "peer": "deployment_peer",
                 "cli": "deployment_cli",
+                "all": ["deployment_cli", "deployment_peer", "deployment_orderer", "deployment_ca", "persistent_volume"],
             }
             try:
                 start(switcher[arg])

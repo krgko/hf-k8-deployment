@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: orderer-pv
+spec:
+  capacity:
+    storage: 5G
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /mnt/sda1/mounted/ledgers/orderer # change to path you want 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: default
+  name: orderer-pvc
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10M

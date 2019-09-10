@@ -28,6 +28,14 @@ spec:
               memory: 256M
               cpu: "0.1"
 
+        - name: dind
+          image: docker:18.09.9-dind
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: dind-storage
+              mountPath: /var/lib/docker
+
         - name: org1-peer0
           image: hyperledger/fabric-peer:1.4.1
           env:
@@ -36,14 +44,16 @@ spec:
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
               value: "localhost:5984"
             - name: CORE_VM_ENDPOINT
-              value: "unix:///host/var/run/docker.sock"
+              value: "tcp://localhost:2375"
+            - name: CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE
+              value: "bridge"
+            - name: GODEBUG
+              value: "netdns=go"
             - name: FABRIC_LOGGING_SPEC
-              value: "debug"
+              value: "info"
             - name: CORE_PEER_LOCALMSPID
               value: "Org1MSP"
             - name: CORE_PEER_ID
-              value: "peer0.org1.example.com"
-            - name: CORE_PEER_TLS_SERVERHOSTOVERRIDE
               value: "peer0.org1.example.com"
             - name: CORE_PEER_MSPCONFIGPATH
               value: /etc/hyperledger/msp
@@ -63,6 +73,8 @@ spec:
             - mountPath: /etc/hyperledger/msp/users
               name: cert-pv
               subPath: peerOrganizations/org1.example.com/users
+            - mountPath: /var/hyperledger/production/
+              name: peer0-org1-pv
             - mountPath: /host/var/run/docker.sock
               name: docker-socket
           resources:
@@ -79,6 +91,11 @@ spec:
         - name: docker-socket
           hostPath:
             path: /var/run/docker.sock
+        - name: dind-storage
+          emptyDir: {}
+        - name: peer0-org1-pv
+          persistentVolumeClaim:
+            claimName: peer0-org1-pvc
 ---
 apiVersion: v1
 kind: Service

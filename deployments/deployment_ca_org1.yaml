@@ -35,6 +35,8 @@ spec:
             - mountPath: /etc/hyperledger/fabric-ca-server-config
               name: cert-pv
               subPath: peerOrganizations/org1.example.com/ca/
+            - mountPath: /etc/hyperledger/fabric-ca-server/
+              name: ca-pv
           resources:
             requests:
               memory: 128M
@@ -46,6 +48,9 @@ spec:
         - name: cert-pv
           persistentVolumeClaim:
             claimName: cert-pvc
+        - name: ca-pv
+          persistentVolumeClaim:
+            claimName: ca-pvc
 ---
 apiVersion: v1
 kind: Service

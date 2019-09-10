@@ -41,9 +41,9 @@ spec:
             - name: cert-pv
               mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
             - name: artifact-pv
-              mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+              mountPath: /opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts/
             - name: chaincode-pv
-              mountPath: /opt/gopath/src/github.com/chaincode
+              mountPath: /opt/gopath/src/github.com/chaincode/
             - name: docker-socket
               mountPath: /host/var/run/docker.sock
           resources:

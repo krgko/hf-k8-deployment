@@ -15,12 +15,16 @@ Options:
 """
 
 def stop(type):
-    all_files = os.listdir(DEPLOYMDIR)
+    if isinstance(type, list):
+        for t in type:
+            stop(t)
+    else:
+        all_files = os.listdir(DEPLOYMDIR)
 
-    # filter only matched keyword
-    selected_configs = [f for f in all_files if type in f]
-    for selected_config in selected_configs:
-        run(selected_config)
+        # filter only matched keyword
+        selected_configs = [f for f in all_files if type in f]
+        for selected_config in selected_configs:
+            run(selected_config)
 
 
 def run(configure_name):
@@ -49,7 +53,7 @@ def main(argv):
                 "orderer": "deployment_orderer",
                 "peer": "deployment_peer",
                 "cli": "deployment_cli",
-                "all": ".yaml",
+                "all": ["deployment_cli", "deployment_peer", "deployment_orderer", "deployment_ca", "persistent_volume"],
             }
             try:
                 stop(switcher[arg])

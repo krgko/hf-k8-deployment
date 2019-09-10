@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  namespace: default
+  name: peer0-org1-pv
+spec:
+  capacity:
+    storage: 5G
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /mnt/sda1/mounted/ledgers/peer0-org1 # change to path you want 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: default
+  name: peer0-org1-pvc
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10M

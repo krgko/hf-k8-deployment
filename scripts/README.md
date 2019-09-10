@@ -11,3 +11,7 @@ Remove current minikube from virtualbox and `minikube delete` then try to `minik
 ## Before start minikube
 
 - Mount resources to master node `minikube mount ../hyperledger-prerequisite:/mnt/sda1/mounted`
+
+## When chaincode container cannot start
+
+Try to remove chaincode docker images inside minikube cluster access by `minikube ssh`

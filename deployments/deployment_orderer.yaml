@@ -38,6 +38,8 @@ spec:
               subPath: ordererOrganizations/example.com/orderers/orderer.example.com
             - mountPath: /etc/hyperledger/artifact
               name: artifact-pv
+            - mountPath: /var/hyperledger/production/orderer/
+              name: orderer-pv
           resources:
             requests:
               memory: 256M
@@ -52,6 +54,9 @@ spec:
         - name: artifact-pv
           persistentVolumeClaim:
             claimName: artifact-pvc
+        - name: orderer-pv
+          persistentVolumeClaim:
+            claimName: orderer-pvc
 ---
 apiVersion: v1
 kind: Service

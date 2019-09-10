@@ -4,7 +4,7 @@
 # Currently need to copy this when exec into cli
 
 TARGET_PEER=org1-peer0 # for current fabric network only
-CHAINCODE_ID=couch # for this case only
+CHAINCODE_ID=fabcar # for this case only
 CHANNEL_NAME=mychannel # for this case only
 ORDERER_POD=$(kubectl get pods -o wide | grep orderer0 | awk '{print $1}') # for current fabric network only
 ORDERER_URL=$(kubectl get pods -o wide | grep orderer0 | awk '{print $6}') # for current fabric network only
@@ -13,7 +13,10 @@ PEER_URL=$(kubectl get pods -o wide | grep peer | awk '{print $6}') # for curren
 PEER_NAME=$(kubectl get pods | grep org1-peer | awk '{print $1}') # for current fabric network only
 PEER_POD=$(kubectl get pods -o wide | grep peer | awk '{print $1}') # for current fabric network only
 CLI_POD=$(kubectl get pods -o wide | grep cli | awk '{print $1}') # for current fabric network only
-PATH_TO_CC=github.com/chaincode/couch/go # for this case only
+PATH_TO_CC=github.com/chaincode # for this case only
+
+PEERID=peer0.org1.example.com
+ORDERERID=orderer.example.com
 
 isRoot() {
     if [ "$(whoami)" != root ]
@@ -59,14 +62,14 @@ instantiateChaincode() {
 setHosts() {
     echo "start set host for $1."
     # To setting hosts - append mode
-    echo "kubectl exec $1 -c $TARGET_PEER echo \"$ORDERER_URL       $ORDERER_NAME\" >> /etc/hosts"
-    kubectl exec $1 -c $TARGET_PEER -- bash -c "echo '$ORDERER_URL       $ORDERER_NAME' >> /etc/hosts" # it will not impact file system
+    echo "kubectl exec $1 -c $TARGET_PEER echo \"$ORDERER_URL       $ORDERERID\" >> /etc/hosts"
+    kubectl exec $1 -c $TARGET_PEER -- bash -c "echo '$ORDERER_URL       $ORDERERID' >> /etc/hosts" # it will not impact file system
 
     echo "set host for $1 completed."
     echo "start set host for $2"
     # To setting hosts - append mode
-    echo "kubectl exec $2 echo \"$PEER_URL       $PEER_NAME\" >> /etc/hosts"
-    kubectl exec $1 -- bash -c "echo '$PEER_URL       $PEER_NAME' >> /etc/hosts" # it will not impact file system
+    echo "kubectl exec $2 echo \"$PEER_URL       $PEERID\" >> /etc/hosts"
+    kubectl exec $1 -- bash -c "echo '$PEER_URL       $PEERID' >> /etc/hosts" # it will not impact file system
 
     echo "set host for $1 completed."
 }
@@ -74,7 +77,7 @@ setHosts() {
 checkHosts() {
     peer_pod=$1
     orderer_pod=$2
-    host=$(kubectl exec $peer_pod -c org1-peer0 cat /etc/hosts | grep $ORDERER_NAME) # hardcode for test
+    host=$(kubectl exec $peer_pod -c org1-peer0 cat /etc/hosts | grep $ORDERERID) # hardcode for test
     if [ -z "$host" ]
     then
         setHosts $peer_pod $orderer_pod
@@ -86,7 +89,7 @@ main() {
     method=$1
 
     # Do stuff
-    isRoot
+    # isRoot
     if [ "$method" == "create_channel" ]
     then
         createChannel
@@ -107,8 +110,8 @@ main() {
         echo "Methods:"
         echo "  create_channel                     Create hyperledger fabric channel"
         echo "  join_channel                       Join channel to peer"
-        echo "  install_chaincode [version]        Install chaincode (no_args for now)"
-        echo "  instantiate_chaincode [version]    Instantiate chaincode (no_args for now)"
+        echo "  install_chaincode [version]        Install chaincode"
+        echo "  instantiate_chaincode [version]    Instantiate chaincode"
         exit 0
     fi
 }
