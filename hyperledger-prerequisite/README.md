@@ -9,6 +9,7 @@
 6. Execute `./generate.yaml` - If got an error when create new `mkdir config` first
 
 Generate file will modify follow configtx.yaml and crypto-config.yaml
+
 ```sh
 #!/bin/sh
 #
@@ -55,8 +56,12 @@ fi
 ```
 
 **Note**: Ensure that all file in the place. Check by see persistent volume config.
-**Note2**: Do not forget to export PATH to binary file like `export PATH=$PATH:$PWD/bin `
+**Note2**: Do not forget to export PATH to binary file like `export PATH=$PATH:$PWD/bin`
 
 ## After make change configs
 
-- Update ca k8s file to use correct private key 
+Update ca k8s file to use correct private key
+
+## If want to change dind to hostPath
+
+Remove dind components and change `tcp://localhost:2375` to `unix:///host/var/run/docker.sock`

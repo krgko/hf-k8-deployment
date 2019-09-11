@@ -103,6 +103,9 @@ main() {
     then
         checkHosts $PEER_POD $ORDERER_POD # hardcode for dev
         instantiateChaincode $2
+    elif [ "$method" == "check_hosts" ]
+    then
+        checkHosts $PEER_POD $ORDERER_POD # hardcode for dev
     else
         echo "Usage:"
         echo "  ./setup-hyperledger.sh [Method] [Args]"

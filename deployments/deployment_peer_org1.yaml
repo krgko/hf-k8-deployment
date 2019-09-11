@@ -44,7 +44,7 @@ spec:
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
               value: "localhost:5984"
             - name: CORE_VM_ENDPOINT
-              value: "tcp://localhost:2375"
+              value: "tcp://localhost:2375" # unix:///host/var/run/docker.sock
             - name: CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE
               value: "bridge"
             - name: GODEBUG
