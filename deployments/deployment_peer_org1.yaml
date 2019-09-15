@@ -92,7 +92,8 @@ spec:
           hostPath:
             path: /var/run/docker.sock
         - name: dind-storage
-          emptyDir: {}
+          hostPath:
+            path: /mnt/sda1/dind-data
         - name: peer0-org1-pv
           persistentVolumeClaim:
             claimName: peer0-org1-pvc

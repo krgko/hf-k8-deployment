@@ -1,3 +1,4 @@
 chaincode/*
 ca-server/*
-ledgers/*
+ledgers/peer0-org1/*
+ledgers/orderer/*
