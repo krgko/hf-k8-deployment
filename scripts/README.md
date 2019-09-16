@@ -19,3 +19,7 @@ Try to remove chaincode docker images inside minikube cluster access by `minikub
 ## Pull docker directly for chaincode container creation
 
 In case of when cannot instantiate chaincode, try to pull base image for chaincode then try again `docker pull hyperledger/fabric-ccenv:latest`
+
+## Enable ingress
+
+`minikube addons enable ingress` follow: [Ingress Link](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
