@@ -1,33 +1,22 @@
 # Deploy Hyperledger Fabric on Kubernetes
 
+This repository focus on learning hyperledger fabric on kubernetes only.
+
+Currently this repository has been prepare for hyperledger fabric version 1.4.1 and able to change the version if needed.
+
 ## Requirement
 
-1. Minikube or kubeadm
-2. Helm - application manager on k8s
-3. Fabric-samples repository
+1. Minikube
+2. Fabric-samples repository
 
-### From scratch solution
+## Prerequisites
 
-1. Download configtxgen and cryptogen
-2. Create channel artifact and genesis block
-```
-./configtxgen -profile {profile-name} -outputblock ./channel-artifact/genesis.block
-```
-3. Create certificates
-```
-./cryptogen generate --config={path-to-cluster-config.tx}
-```
+- Hyperledger fabric docker images
 
-## How to install helm
+## Change crypto config and channel artifact
 
-Linux
-```
-curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-chmod 700 get_helm.sh
-./get_helm.sh
-```
+There is document provided to do those things. See [here](hyperledger-prerequisite/README.md)
 
-Then initialize
-```
-helm init
-```
+## Deployment the network
+
+Here is a [link](scripts/README.md) for scripts usage.

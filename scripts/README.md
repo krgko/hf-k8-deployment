@@ -3,6 +3,8 @@
 1. start.py - `python start.sh -t {hyperledger_component}` to start create pods
 2. stop.py - Opposite of start.py
 3. setup-hyperledger.sh - Execute this after all of component running without failure
+4. clean_pv.sh - To clean mounted volume from kubernetes
+5. clear_container_dind.sh - DIND has been mapped volume to kubernetes master when need to deploy chaincode it need to clear first
 
 ## When minikube broken
 
