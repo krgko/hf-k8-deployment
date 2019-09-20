@@ -16,17 +16,17 @@ spec:
         peer-id: peer0
     spec:
       containers:
-        - name: org1-peer0-couchdb
-          image: hyperledger/fabric-couchdb:0.4.15
-          ports:
-            - containerPort: 5984
-          resources:
-            requests:
-              memory: 128M
-              cpu: "0.05"
-            limits:
-              memory: 256M
-              cpu: "0.1"
+        # - name: org1-peer0-couchdb
+        #   image: hyperledger/fabric-couchdb:0.4.15
+        #   ports:
+        #     - containerPort: 5984
+        #   resources:
+        #     requests:
+        #       memory: 128M
+        #       cpu: "0.05"
+        #     limits:
+        #       memory: 256M
+        #       cpu: "0.1"
 
         - name: dind
           image: docker:18.09.9-dind
@@ -35,14 +35,20 @@ spec:
           volumeMounts:
             - name: dind-storage
               mountPath: /var/lib/docker
+          resources:
+            requests:
+              cpu: "0.1"
+            limits:
+              memory: 10G
+              cpu: "0.5"
 
         - name: org1-peer0
           image: hyperledger/fabric-peer:1.4.1
           env:
             - name: CORE_LEDGER_STATE_STATEDATABASE
-              value: "CouchDB"
-            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
-              value: "localhost:5984"
+              value: "LevelDB"
+            # - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+            #   value: "localhost:5984"
             - name: CORE_VM_ENDPOINT
               value: "tcp://localhost:2375" # unix:///host/var/run/docker.sock
             - name: CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE
@@ -83,7 +89,7 @@ spec:
               cpu: "0.2"
             limits:
               memory: 512M
-              cpu: "0.5"
+              cpu: "0.8"
       volumes:
         - name: cert-pv
           persistentVolumeClaim:
